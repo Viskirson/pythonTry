@@ -46,17 +46,17 @@ itemForChose : dict[str, dict[str, Union[str, int, float]]] = {# Словарь 
 
 itemSelector: list[str] = [ # Список для выбора предметов
     f'''
-    1. {itemForChose["banana"]["именование"]} - Кол-во: {itemForChose["banana"]["количество"]}
-      {itemForChose["banana"]["описание"]}.''',
+    {itemForChose["banana"]["именование"]} - Кол-во: {itemForChose["banana"]["количество"]}
+    {itemForChose["banana"]["описание"]}.''',
     f'''
-    2. {itemForChose["luck_potion"]["именование"]} - Кол-во: {itemForChose["luck_potion"]["количество"]}
-      {itemForChose["luck_potion"]["описавние"]}.''',
+    {itemForChose["luck_potion"]["именование"]} - Кол-во: {itemForChose["luck_potion"]["количество"]}
+    {itemForChose["luck_potion"]["описавние"]}.''',
     f'''
-    3. {itemForChose["rock"]["именование"]} - Кол-во: {itemForChose["rock"]["количество"]}
-      {itemForChose["rock"]["описание"]}.''',
+    {itemForChose["rock"]["именование"]} - Кол-во: {itemForChose["rock"]["количество"]}
+    {itemForChose["rock"]["описание"]}.''',
     f'''
-    4. {itemForChose["golf_cap"]["именование"]} - Кол-во: {itemForChose["golf_cap"]["количество"]}
-      {itemForChose["golf_cap"]["описание"]}.''']
+    {itemForChose["golf_cap"]["именование"]} - Кол-во: {itemForChose["golf_cap"]["количество"]}
+    {itemForChose["golf_cap"]["описание"]}.''']
 
 
 # == Квест №1 "Имя игрока" ==
@@ -110,24 +110,34 @@ for i in range(len(inventory)):
 if len(inventory) == 0: print("Пусто")
 print("Мда... не густо")
 
-while True:
-    choiceCount = 0
-    itemChoice = 99
+
+itemChoice = 99
+choiceCount = 0
+while len(itemSelector) != 2:
+    
     print(f'''
     Вот список предметов, которые ты можешь взять с собой в путешествие: ''')
     for i in range(len(itemSelector)):
         print(f'{i + 1}. {itemSelector[i]}')
-    print('''Что выбрешеь? (введи номер предмета)''')
 
-    itemChoice = input('Выбери предмет (1,2,3,4): ')
+    itemChoice = input('Выбери предмет (введи номер предмета): ')
+    
     if itemChoice not in ['1', '2', '3', '4']:
         print('Неверный выбор. Пожалуйста, выбери 1, 2, 3 или 4.')
-    elif itemChoice == '1': itemChoice = "banana"
-    elif itemChoice == '2': itemChoice = "luck_potion" 
-    elif itemChoice == '3': itemChoice = "rock"
-    elif itemChoice == '4': itemChoice = "golf_cap"
-    inventory.insert(0,itemForChose[itemChoice]["именование"])
+        continue
+    
+    if itemChoice == '1': key = "banana"
+    elif itemChoice == '2': key = "luck_potion" 
+    elif itemChoice == '3': key = "rock"
+    elif itemChoice == '4': key = "golf_cap"
+
+    inventory.insert(0,itemForChose[key]["именование"])
+    del itemSelector[int(itemChoice) - 1]  # Удаляем выбранный предмет из списка доступных предметов
+
+
     print(inventory)
-
-    break
-
+    print(len(itemSelector))
+    choiceCount += 1
+    
+print('''Чтож, ты сделал свой выбор.''')
+print(list(itemForChose.keys()))
